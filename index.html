@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weather Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,300&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0d1117;--surface:#161b22;--surface2:#1c2333;--border:rgba(255,255,255,0.08);--text:#e6edf3;--muted:#8b949e;--accent:#58a6ff;--warm:#f0883e;--cold:#79c0ff;--rain:#a8daff;--r:12px;--btn-text:#0d1117}
+  [data-theme="light"]{--bg:#f5f5f0;--surface:#fff;--surface2:#ebebeb;--border:rgba(0,0,0,0.09);--text:#1a1a1a;--muted:#737373;--accent:#1a6cf0;--warm:#d4610a;--cold:#1a6cf0;--rain:#2d7dd2;--btn-text:#fff}
+  [data-theme="sunset"]{--bg:#1a0a00;--surface:#2b1200;--surface2:#3d1e00;--border:rgba(255,160,80,0.15);--text:#ffe4c4;--muted:#c4845a;--accent:#ff8c42;--warm:#ffb347;--cold:#ff6b6b;--rain:#ffad76;--btn-text:#1a0a00}
+  [data-theme="arctic"]{--bg:#050d1a;--surface:#0a1628;--surface2:#0f2040;--border:rgba(120,200,255,0.12);--text:#c8e8ff;--muted:#5a9ec4;--accent:#00cfff;--warm:#00cfff;--cold:#80e5ff;--rain:#40c8ff;--btn-text:#050d1a}
+  [data-theme="storm"]{--bg:#0a0010;--surface:#130020;--surface2:#1d0030;--border:rgba(180,100,255,0.14);--text:#e8d0ff;--muted:#9060b0;--accent:#c060ff;--warm:#e080ff;--cold:#9060ff;--rain:#b080e0;--btn-text:#0a0010}
+  [data-theme="barbie"]{--bg:#ff85c2;--surface:#ff4da6;--surface2:#ff1493;--border:rgba(255,255,255,0.2);--text:#fff0f8;--muted:#ffb3d9;--accent:#fff;--warm:#ffe066;--cold:#c9b1ff;--rain:#b3e5fc;--btn-text:#ff1493}
+  [data-theme="midnight"]{--bg:#0b132b;--surface:#1a2340;--surface2:#243050;--border:rgba(91,192,235,0.15);--text:#d0eeff;--muted:#5a8a9f;--accent:#5bc0eb;--warm:#5bc0eb;--cold:#a8e6ff;--rain:#7dd3fc;--btn-text:#0b132b}
+  [data-theme="neon"]{--bg:#1a1a1a;--surface:#242424;--surface2:#2e2e2e;--border:rgba(57,255,20,0.15);--text:#e8ffe8;--muted:#4a7a4a;--accent:#39ff14;--warm:#39ff14;--cold:#00ffff;--rain:#39ff14;--btn-text:#1a1a1a}
+  [data-theme="navy"]{--bg:#f8f9fa;--surface:#fff;--surface2:#e9ecef;--border:rgba(29,53,87,0.12);--text:#1d3557;--muted:#6c757d;--accent:#1d3557;--warm:#e63946;--cold:#1d3557;--rain:#457b9d;--btn-text:#f8f9fa}
+  [data-theme="gold"]{--bg:#000;--surface:#111;--surface2:#1a1a1a;--border:rgba(212,175,55,0.2);--text:#f5e6b2;--muted:#8a7640;--accent:#d4af37;--warm:#d4af37;--cold:#c8b97a;--rain:#b8a040;--btn-text:#000}
+  [data-theme="lavender"]{--bg:#2d1e2f;--surface:#3d2840;--surface2:#4d3250;--border:rgba(224,170,255,0.15);--text:#f0e0ff;--muted:#9060a0;--accent:#e0aaff;--warm:#ffb3c6;--cold:#c8b1ff;--rain:#c0a0ff;--btn-text:#2d1e2f}
+  [data-theme="slate"]{--bg:#2f3e46;--surface:#3a4f5c;--surface2:#445f6e;--border:rgba(132,169,192,0.2);--text:#d4e8f0;--muted:#7a9db0;--accent:#84a9c0;--warm:#84a9c0;--cold:#b0d4e8;--rain:#90c0d8;--btn-text:#2f3e46}
+  [data-theme="terra"]{--bg:#fff1e6;--surface:#fff8f0;--surface2:#ffe8d0;--border:rgba(203,153,126,0.2);--text:#4a2c1a;--muted:#9a6a50;--accent:#cb997e;--warm:#cb997e;--cold:#6b8cba;--rain:#8aadcc;--btn-text:#fff1e6}
+  [data-theme="eco"]{--bg:#1b4332;--surface:#245840;--surface2:#2d6e50;--border:rgba(149,213,178,0.15);--text:#d8f3dc;--muted:#52b788;--accent:#95d5b2;--warm:#95d5b2;--cold:#74c69d;--rain:#52b788;--btn-text:#1b4332}
+  [data-theme="coral"]{--bg:#1b263b;--surface:#243550;--surface2:#2d4464;--border:rgba(255,107,107,0.15);--text:#e8f0ff;--muted:#6a84a0;--accent:#ff6b6b;--warm:#ff6b6b;--cold:#74b3ce;--rain:#90c0e0;--btn-text:#1b263b}
+  [data-theme="ember"]{--bg:#2d2d2d;--surface:#383838;--surface2:#424242;--border:rgba(247,127,0,0.15);--text:#fff0d8;--muted:#8a6040;--accent:#f77f00;--warm:#f77f00;--cold:#74a0c0;--rain:#f7a040;--btn-text:#2d2d2d}
+  [data-theme="aurora"]{--bg:#020d12;--surface:#071822;--surface2:#0d2430;--border:rgba(0,255,160,0.12);--text:#d0fff0;--muted:#3a8060;--accent:#00ffaa;--warm:#00ffaa;--cold:#00cfff;--rain:#40ffcc;--btn-text:#020d12}
+  [data-theme="sakura"]{--bg:#1a0a10;--surface:#2a1020;--surface2:#3a1830;--border:rgba(255,182,193,0.15);--text:#ffe8f0;--muted:#c0708a;--accent:#ff9ab5;--warm:#ffb7c5;--cold:#d4a8ff;--rain:#ff9ab5;--btn-text:#1a0a10}
+  [data-theme="galaxy"]{--bg:#04020e;--surface:#0a0620;--surface2:#130a30;--border:rgba(180,120,255,0.14);--text:#e8d8ff;--muted:#6040a0;--accent:#c080ff;--warm:#e060ff;--cold:#80c0ff;--rain:#a060ff;--btn-text:#04020e}
+  [data-theme="waves"]{--bg:#000d1a;--surface:#001833;--surface2:#00244d;--border:rgba(0,180,255,0.15);--text:#c8f0ff;--muted:#2a6080;--accent:#00b4ff;--warm:#00d4e8;--cold:#0088cc;--rain:#40c8ff;--btn-text:#000d1a}
+  [data-theme="city"]{--bg:#0a0a0f;--surface:#12121c;--surface2:#1c1c2a;--border:rgba(255,200,60,0.12);--text:#f0e8c8;--muted:#706040;--accent:#ffc83c;--warm:#ffa020;--cold:#80b0e0;--rain:#ffc83c;--btn-text:#0a0a0f}
+  [data-theme="disco"]{--bg:#0d0010;--surface:#180020;--surface2:#220030;--border:rgba(255,255,255,0.12);--text:#fff;--muted:#a080b0;--accent:#ff40ff;--warm:#ff40ff;--cold:#40ffff;--rain:#ff80ff;--btn-text:#0d0010}
+  [data-theme="bubbles"]{--bg:#001428;--surface:#001e3a;--surface2:#00284e;--border:rgba(100,220,255,0.15);--text:#d0f4ff;--muted:#2a6880;--accent:#40dcff;--warm:#40dcff;--cold:#80eeff;--rain:#60e8ff;--btn-text:#001428}
+  [data-theme="crystal"]{--bg:#f0f4ff;--surface:#fff;--surface2:#e8eeff;--border:rgba(100,120,255,0.12);--text:#1a1a3a;--muted:#6068a0;--accent:#6478ff;--warm:#8060ff;--cold:#4090ff;--rain:#6080ff;--btn-text:#fff}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'DM Mono',monospace;background:var(--bg);color:var(--text);min-height:100vh;padding:2rem 1.5rem 4rem;transition:background .35s,color .35s}
+  #particle-canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;}
+  header,.search-row,#status,#content{position:relative;z-index:1;}
+  header{max-width:960px;margin:0 auto 2rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);padding-bottom:1.25rem;flex-wrap:wrap;gap:12px}
+  .logo{font-family:'Fraunces',serif;font-size:1.6rem;font-weight:300;letter-spacing:-0.02em}
+  .logo span{color:var(--warm);font-style:italic}
+  .header-right{display:flex;align-items:center;gap:12px}
+  .tagline{font-size:.7rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+  .gear-btn{width:44px;height:44px;border-radius:50%;border:1px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,border-color .2s;flex-shrink:0;box-shadow:0 4px 16px rgba(0,0,0,0.3)}
+  .gear-btn:hover{background:var(--surface2);border-color:var(--accent)}
+  .gear-btn svg{width:16px;height:16px;fill:currentColor;transition:transform .4s}
+  .gear-btn.open svg{transform:rotate(60deg)}
+  .settings-wrap{position:fixed;bottom:20px;right:20px;z-index:99999}
+  .settings-panel{display:none;position:fixed;bottom:74px;right:20px;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px 20px;width:300px;max-height:calc(100vh - 110px);overflow-y:auto;z-index:99999;box-shadow:0 8px 32px rgba(0,0,0,0.45);}
+  .settings-panel.open{display:block}
+  .panel-section-label{font-size:.6rem;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px}
+  .panel-divider{border:none;border-top:1px solid var(--border);margin:14px 0}
+  .unit-toggle{display:flex;background:var(--surface2);border:1px solid var(--border);border-radius:8px;overflow:hidden;width:100%}
+  .unit-btn{flex:1;font-family:'DM Mono',monospace;font-size:.75rem;padding:7px 0;border:none;background:transparent;color:var(--muted);cursor:pointer;transition:background .2s,color .2s}
+  .unit-btn.active{background:var(--accent);color:var(--btn-text)}
+  .theme-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:7px}
+  .theme-btn{width:100%;aspect-ratio:1;border-radius:50%;border:2px solid transparent;cursor:pointer;transition:transform .15s,border-color .15s;padding:0;outline:none}
+  .theme-btn:hover{transform:scale(1.15)}
+  .theme-btn.active{border-color:var(--accent)}
+  .theme-btn[data-t="dark"]{background:linear-gradient(135deg,#0d1117 50%,#58a6ff 50%)}
+  .theme-btn[data-t="light"]{background:linear-gradient(135deg,#f5f5f0 50%,#1a6cf0 50%)}
+  .theme-btn[data-t="sunset"]{background:linear-gradient(135deg,#1a0a00 50%,#ff8c42 50%)}
+  .theme-btn[data-t="arctic"]{background:linear-gradient(135deg,#050d1a 50%,#00cfff 50%)}
+  .theme-btn[data-t="storm"]{background:linear-gradient(135deg,#0a0010 50%,#c060ff 50%)}
+  .theme-btn[data-t="barbie"]{background:linear-gradient(135deg,#ff85c2 50%,#fff 50%)}
+  .theme-btn[data-t="midnight"]{background:linear-gradient(135deg,#0b132b 50%,#5bc0eb 50%)}
+  .theme-btn[data-t="neon"]{background:linear-gradient(135deg,#1a1a1a 50%,#39ff14 50%)}
+  .theme-btn[data-t="navy"]{background:linear-gradient(135deg,#f8f9fa 50%,#1d3557 50%)}
+  .theme-btn[data-t="gold"]{background:linear-gradient(135deg,#000 50%,#d4af37 50%)}
+  .theme-btn[data-t="lavender"]{background:linear-gradient(135deg,#2d1e2f 50%,#e0aaff 50%)}
+  .theme-btn[data-t="slate"]{background:linear-gradient(135deg,#2f3e46 50%,#84a9c0 50%)}
+  .theme-btn[data-t="terra"]{background:linear-gradient(135deg,#fff1e6 50%,#cb997e 50%)}
+  .theme-btn[data-t="eco"]{background:linear-gradient(135deg,#1b4332 50%,#95d5b2 50%)}
+  .theme-btn[data-t="coral"]{background:linear-gradient(135deg,#1b263b 50%,#ff6b6b 50%)}
+  .theme-btn[data-t="ember"]{background:linear-gradient(135deg,#2d2d2d 50%,#f77f00 50%)}
+  .theme-btn[data-t="aurora"]{background:linear-gradient(135deg,#020d12 50%,#00ffaa 50%)}
+  .theme-btn[data-t="sakura"]{background:linear-gradient(135deg,#1a0a10 50%,#ff9ab5 50%)}
+  .theme-btn[data-t="galaxy"]{background:linear-gradient(135deg,#04020e 50%,#c080ff 50%)}
+  .theme-btn[data-t="waves"]{background:linear-gradient(135deg,#000d1a 50%,#00b4ff 50%)}
+  .theme-btn[data-t="city"]{background:linear-gradient(135deg,#0a0a0f 50%,#ffc83c 50%)}
+  .theme-btn[data-t="disco"]{background:linear-gradient(135deg,#0d0010 50%,#ff40ff 50%)}
+  .theme-btn[data-t="bubbles"]{background:linear-gradient(135deg,#001428 50%,#40dcff 50%)}
+  .theme-btn[data-t="crystal"]{background:linear-gradient(135deg,#f0f4ff 50%,#6478ff 50%)}
+  .theme-name{font-size:.65rem;color:var(--muted);text-align:center;margin-top:8px;min-height:.9rem;transition:opacity .15s}
+  .search-row{max-width:960px;margin:0 auto 2rem;display:flex;gap:8px}
+  input[type=number]{flex:1;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:.8rem;padding:10px 14px;border-radius:var(--r);outline:none;transition:border-color .2s}
+  input[type=number]:focus{border-color:var(--accent)}
+  input[type=number]::placeholder{color:var(--muted)}
+  .fetch-btn{background:var(--accent);color:var(--btn-text);font-family:'DM Mono',monospace;font-size:.8rem;font-weight:500;border:none;border-radius:var(--r);padding:10px 20px;cursor:pointer;white-space:nowrap;transition:opacity .15s}
+  .fetch-btn:hover{opacity:.85}
+  .loc-btn{background:var(--surface);color:var(--text);border:1px solid var(--border);font-size:1rem;border-radius:var(--r);padding:10px 14px;cursor:pointer}
+  .loc-btn:hover{background:var(--surface2)}
+  .grid{max-width:960px;margin:0 auto;display:grid;gap:12px}
+  .hero{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:2rem;display:grid;grid-template-columns:1fr auto;align-items:start;gap:1rem}
+  .weather-icon{font-size:5rem;line-height:1}
+  .temp-big{font-family:'Fraunces',serif;font-size:4rem;font-weight:600;letter-spacing:-0.04em;line-height:1}
+  .condition-label{font-size:.75rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-top:6px}
+  .feels-like{font-size:.75rem;color:var(--muted);margin-top:4px}
+  .hist-badge{display:inline-block;font-size:.7rem;margin-top:10px;padding:4px 10px;border-radius:6px;font-weight:500}
+  .hist-above{background:rgba(240,136,62,0.15);color:var(--warm);border:1px solid rgba(240,136,62,0.3)}
+  .hist-below{background:rgba(121,192,255,0.15);color:var(--cold);border:1px solid rgba(121,192,255,0.3)}
+  .hist-normal{background:var(--surface2);color:var(--muted);border:1px solid var(--border)}
+  .alert-stack{display:grid;gap:8px}
+  .alert{border-radius:var(--r);padding:12px 16px;display:flex;align-items:flex-start;gap:10px;font-size:.78rem;line-height:1.5}
+  .alert.danger{background:rgba(255,80,80,0.1);border:1px solid rgba(255,80,80,0.25);color:#ff8080}
+  .alert.warning{background:rgba(240,180,60,0.1);border:1px solid rgba(240,180,60,0.25);color:#f0c060}
+  .alert-icon{font-size:1.1rem;flex-shrink:0;margin-top:1px}
+  .stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
+  .stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px}
+  .stat-label{font-size:.65rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+  .stat-value{font-size:1.2rem;font-weight:500}
+  .stat-unit{font-size:.65rem;color:var(--muted)}
+  .aqi-bar{height:6px;border-radius:3px;margin-top:6px;background:linear-gradient(90deg,#00e400,#ffff00,#ff7e00,#ff0000,#8f3f97,#7e0023)}
+  .aqi-marker-wrap{position:relative;height:10px}
+  .aqi-marker{position:absolute;top:0;width:3px;height:10px;background:var(--text);border-radius:2px;transform:translateX(-50%)}
+  .pollen-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+  .pollen-card{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;text-align:center}
+  .pollen-name{font-size:.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+  .pollen-val{font-size:1rem;font-weight:500;margin-top:4px}
+  .forecast-row{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+  .day-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:12px 8px;text-align:center}
+  .day-card.today{border-color:var(--accent)}
+  .day-name{font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+  .day-icon{font-size:1.5rem;margin-bottom:6px}
+  .day-hi{font-size:.85rem;font-weight:500;color:var(--warm)}
+  .day-lo{font-size:.75rem;color:var(--cold);margin-top:2px}
+  .day-pop{font-size:.6rem;color:var(--rain);margin-top:5px}
+  .day-wind{font-size:.6rem;color:var(--muted);margin-top:3px}
+  .day-uv{font-size:.6rem;font-weight:500;margin-top:3px}
+  .section-title{font-size:.65rem;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;padding-left:2px}
+  #status{max-width:960px;margin:1rem auto 0;font-size:.75rem;color:var(--muted);min-height:1.2rem}
+  .placeholder{max-width:960px;margin:3rem auto;text-align:center;color:var(--muted);font-size:.8rem;line-height:2}
+  .placeholder .big{font-family:'Fraunces',serif;font-size:3rem;color:var(--surface2)}
+  .ml-badge{font-size:.6rem;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:2px 7px;color:var(--accent);letter-spacing:.06em;vertical-align:middle}
+  @media(max-width:640px){.forecast-row{grid-template-columns:repeat(3,1fr)}.temp-big{font-size:2.8rem}.settings-panel{width:calc(100vw - 40px);right:20px}}
+  .loc-drawer{position:fixed;top:0;left:0;height:100vh;width:300px;background:var(--surface);border-right:1px solid var(--border);z-index:9998;display:flex;flex-direction:column;transform:translateX(-100%);transition:transform .3s ease;box-shadow:4px 0 24px rgba(0,0,0,0.3);}
+  .loc-drawer.open{transform:translateX(0);}
+  .loc-drawer-header{padding:1.25rem 1rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+  .loc-drawer-title{font-family:'Fraunces',serif;font-size:1rem;font-weight:300;}
+  .loc-drawer-title span{color:var(--warm);font-style:italic;}
+  .loc-drawer-close{background:none;border:none;color:var(--muted);cursor:pointer;font-size:1.1rem;padding:4px 8px;border-radius:6px;line-height:1;}
+  .loc-drawer-close:hover{background:var(--surface2);color:var(--text);}
+  .loc-list{flex:1;overflow-y:auto;padding:.5rem;}
+  .loc-list::-webkit-scrollbar{width:3px;}
+  .loc-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+  .loc-item{padding:.7rem .875rem;border-radius:10px;cursor:pointer;border:1px solid transparent;margin-bottom:4px;display:flex;align-items:center;justify-content:space-between;gap:8px;transition:background .15s,border-color .15s;}
+  .loc-item:hover{background:var(--surface2);}
+  .loc-item.active{background:var(--surface2);border-color:var(--accent);}
+  .loc-item-left{flex:1;min-width:0;}
+  .loc-item-name{font-size:.8rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .loc-item-coords{font-size:.62rem;color:var(--muted);margin-top:2px;}
+  .loc-item-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+  .loc-item-temp{font-family:'Fraunces',serif;font-size:1.05rem;font-weight:300;}
+  .loc-item-icon{font-size:.85rem;}
+  .loc-del-btn{background:none;border:none;color:var(--muted);cursor:pointer;padding:3px 5px;border-radius:5px;font-size:.7rem;opacity:0;transition:opacity .15s,color .15s;}
+  .loc-item:hover .loc-del-btn{opacity:1;}
+  .loc-del-btn:hover{color:#ff6b6b;}
+  .loc-empty{text-align:center;padding:2rem 1rem;color:var(--muted);font-size:.72rem;line-height:1.8;}
+  .loc-empty-icon{display:block;font-size:2rem;margin-bottom:.5rem;opacity:.35;}
+  .loc-add-form{padding:.75rem;border-top:1px solid var(--border);flex-shrink:0;}
+  .loc-add-form.hidden{display:none;}
+  .loc-field{margin-bottom:7px;}
+  .loc-field label{display:block;font-size:.58rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px;}
+  .loc-input{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:.75rem;padding:7px 10px;border-radius:8px;outline:none;transition:border-color .2s;}
+  .loc-input:focus{border-color:var(--accent);}
+  .loc-coords-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+  .loc-form-btns{display:flex;gap:6px;margin-top:8px;}
+  .loc-save-btn{flex:1;background:var(--accent);color:var(--btn-text);font-family:'DM Mono',monospace;font-size:.72rem;font-weight:500;border:none;border-radius:8px;padding:7px 0;cursor:pointer;transition:opacity .15s;}
+  .loc-save-btn:hover{opacity:.85;}
+  .loc-cancel-btn{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'DM Mono',monospace;font-size:.72rem;border-radius:8px;padding:7px 10px;cursor:pointer;transition:background .15s;}
+  .loc-cancel-btn:hover{background:var(--surface2);}
+  .loc-tab{position:fixed;left:0;top:50%;transform:translateY(-50%);z-index:9997;background:var(--surface);border:1px solid var(--border);border-left:none;color:var(--muted);cursor:pointer;padding:12px 5px;border-radius:0 8px 8px 0;font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;writing-mode:vertical-rl;transition:background .2s,color .2s,left .3s ease;}
+  .loc-tab:hover{background:var(--surface2);color:var(--text);}
+  .loc-tab.open{left:300px;}
+  .hero-loc-label{font-size:.65rem;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.5rem;}
+  .wx-toast{position:fixed;bottom:76px;left:50%;transform:translateX(-50%) translateY(8px);background:var(--surface);border:1px solid var(--accent);border-radius:10px;padding:9px 18px;font-size:.74rem;color:var(--text);opacity:0;pointer-events:none;z-index:99999;white-space:nowrap;transition:opacity .25s,transform .25s;}
+  .wx-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+  .save-loc-btn{background:var(--surface);color:var(--accent);border:1px solid var(--border);font-family:'DM Mono',monospace;font-size:.75rem;border-radius:var(--r);padding:10px 12px;cursor:pointer;white-space:nowrap;transition:background .2s,border-color .2s;}
+  .save-loc-btn:hover{background:var(--surface2);border-color:var(--accent);}
+  /* 24h chart legend */
+  .hourly-legend{display:flex;gap:14px;font-size:.6rem;color:var(--muted);margin-bottom:10px;flex-wrap:wrap}
+  .hourly-legend-item{display:flex;align-items:center;gap:5px}
+  .leg-line{width:18px;height:2px;border-radius:1px}
+  .leg-dash{width:18px;border-top:2px dashed}
+  .leg-fill{width:10px;height:10px;border-radius:50%;opacity:.4}
+
+  /* ── Header login button ── */
+  .header-login-btn {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+    font-family: 'DM Mono', monospace;
+    font-size: .72rem;
+    border-radius: 20px;
+    padding: 6px 14px 6px 10px;
+    cursor: pointer;
+    transition: border-color .2s, background .2s;
+    white-space: nowrap;
+    letter-spacing: .02em;
+  }
+  .header-login-btn:hover {
+    border-color: var(--accent);
+    background: var(--surface);
+  }
+  .header-login-btn .login-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--muted);
+    flex-shrink: 0;
+    transition: background .2s;
+  }
+  .header-login-btn:hover .login-dot { background: var(--accent); }
+
+  /* ── User pill ── */
+  .user-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 5px 12px 5px 8px;
+    font-size: .72rem;
+    cursor: pointer;
+    transition: border-color .2s, background .2s;
+    letter-spacing: .02em;
+  }
+  .user-pill:hover { border-color: rgba(255,100,100,0.4); background: var(--surface2); }
+  .user-pill-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+    box-shadow: 0 0 6px var(--accent);
+  }
+  .user-pill-name { color: var(--text); max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .user-pill-logout { color: var(--muted); font-size: .6rem; margin-left: 2px; opacity: .6; }
+  .user-pill:hover .user-pill-logout { color: #ff8080; opacity: 1; }
+
+  /* ── Auth hint strip ── */
+  .auth-hint{font-size:.65rem;color:var(--muted);text-align:center;padding:.6rem .75rem;line-height:1.7;border-top:1px solid var(--border);flex-shrink:0}
+  .auth-hint-link{color:var(--accent);cursor:pointer;text-decoration:none;border:none;background:none;font-family:'DM Mono',monospace;font-size:.65rem;padding:0}
+  .auth-hint-link:hover{text-decoration:underline}
+
+  /* ── hide/show helper used by reset flow ── */
+  .hidden { display: none !important; }
+
+  /* ── security-question select ── */
+  .auth-select {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: .78rem;
+    padding: 10px 14px;
+    border-radius: 10px;
+    outline: none;
+    appearance: none;
+    cursor: pointer;
+    transition: border-color .2s, box-shadow .2s;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238b949e' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+  }
+  .auth-select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(88,166,255,0.1);
+  }
+  .auth-select option { background: var(--surface); }
+
+  /* ── "Forgot password?" link ── */
+  .auth-forgot-link {
+    display: block;
+    text-align: right;
+    font-size: .62rem;
+    color: var(--muted);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: 'DM Mono', monospace;
+    padding: 0;
+    margin-top: 6px;
+    transition: color .2s;
+  }
+  .auth-forgot-link:hover { color: var(--accent); text-decoration: underline; }
+
+  /* ── reset-flow question display box ── */
+  .auth-question-box {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: .78rem;
+    color: var(--text);
+    line-height: 1.5;
+    margin-bottom: 4px;
+  }
+
+  /* ── optional hint below a field ── */
+  .auth-field-hint {
+    font-size: .58rem;
+    color: var(--muted);
+    margin-top: 4px;
+    line-height: 1.5;
+  }
+
+  /* ══════════════════════════════════════════════
+     AUTH MODAL
+  ══════════════════════════════════════════════ */
+  .auth-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(12px) saturate(0.8);
+    -webkit-backdrop-filter: blur(12px) saturate(0.8);
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .3s cubic-bezier(.4,0,.2,1);
+  }
+  .auth-overlay.open { opacity: 1; pointer-events: all; }
+
+  .auth-modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    width: min(420px, calc(100vw - 32px));
+    box-shadow: 0 32px 80px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.04) inset;
+    overflow: hidden;
+    transform: translateY(20px) scale(0.97);
+    transition: transform .35s cubic-bezier(.4,0,.2,1);
+  }
+  .auth-overlay.open .auth-modal { transform: translateY(0) scale(1); }
+
+  .auth-modal-stripe {
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--warm), var(--accent));
+    background-size: 200% 100%;
+    animation: auth-stripe-slide 3s linear infinite;
+  }
+  @keyframes auth-stripe-slide {
+    0%   { background-position: 0% 0%; }
+    100% { background-position: 200% 0%; }
+  }
+
+  .auth-modal-body { padding: 2rem 2rem 1.75rem; }
+
+  .auth-modal-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+  }
+
+  .auth-modal-wordmark {
+    font-family: 'Fraunces', serif;
+    font-size: 1.5rem;
+    font-weight: 300;
+    letter-spacing: -.02em;
+    line-height: 1;
+  }
+  .auth-modal-wordmark span { color: var(--warm); font-style: italic; }
+
+  .auth-modal-close {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    color: var(--muted);
+    cursor: pointer;
+    width: 30px; height: 30px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .9rem;
+    transition: border-color .2s, color .2s, background .2s;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .auth-modal-close:hover { border-color: var(--text); color: var(--text); background: var(--surface2); }
+
+  .auth-modal-tagline {
+    font-size: .72rem;
+    color: var(--muted);
+    line-height: 1.65;
+    margin-bottom: 1.75rem;
+  }
+
+  .auth-tabs {
+    display: flex;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 3px;
+    margin-bottom: 1.5rem;
+    gap: 2px;
+  }
+  .auth-tab {
+    flex: 1;
+    font-family: 'DM Mono', monospace;
+    font-size: .72rem;
+    padding: 7px 0;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    border-radius: 7px;
+    cursor: pointer;
+    transition: background .2s, color .2s, box-shadow .2s;
+    letter-spacing: .04em;
+  }
+  .auth-tab.active {
+    background: var(--surface);
+    color: var(--text);
+    box-shadow: 0 1px 6px rgba(0,0,0,0.3);
+  }
+
+  .auth-field { margin-bottom: 14px; }
+  .auth-field label {
+    display: block;
+    font-size: .58rem;
+    color: var(--muted);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+  .auth-input-wrap { position: relative; }
+  .auth-input {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: .82rem;
+    padding: 10px 14px;
+    border-radius: 10px;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .auth-input::placeholder { color: var(--muted); opacity: .55; }
+  .auth-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(88,166,255,0.1);
+  }
+  .auth-input:focus::placeholder { opacity: .3; }
+
+  .auth-submit {
+    width: 100%;
+    background: var(--accent);
+    color: var(--btn-text);
+    font-family: 'DM Mono', monospace;
+    font-size: .82rem;
+    font-weight: 500;
+    border: none;
+    border-radius: 10px;
+    padding: 11px;
+    cursor: pointer;
+    margin-top: 4px;
+    letter-spacing: .04em;
+    transition: opacity .15s, transform .15s;
+    position: relative;
+    overflow: hidden;
+  }
+  .auth-submit:hover { opacity: .88; }
+  .auth-submit:active { transform: scale(.98); }
+  .auth-submit.loading { opacity: .6; pointer-events: none; }
+
+  .auth-error {
+    font-size: .68rem;
+    color: #ff8080;
+    min-height: 1rem;
+    margin: 8px 0 4px;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: opacity .2s, transform .2s;
+  }
+  .auth-error.visible { opacity: 1; transform: translateY(0); }
+
+  .auth-footer-note {
+    font-size: .62rem;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 14px;
+    line-height: 1.6;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+    opacity: .7;
+  }
+  .auth-footer-note strong { color: var(--text); font-weight: 500; }
+</style>
+</head>
+<body data-theme="dark">
+
+<canvas id="particle-canvas"></canvas>
+
+<div class="loc-drawer" id="locDrawer">
+  <div class="loc-drawer-header">
+    <div class="loc-drawer-title">saved<span>.</span></div>
+    <button class="loc-drawer-close" id="locDrawerClose">✕</button>
+  </div>
+  <div class="loc-list" id="locList"></div>
+
+  <div class="auth-hint" id="authHint">
+    <span id="authHintText">
+      <button class="auth-hint-link" id="authHintLoginBtn">Log in</button> to sync locations across devices
+    </span>
+  </div>
+
+  <div class="loc-add-form hidden" id="locAddForm">
+    <div class="loc-field">
+      <label>Location name</label>
+      <input type="text" class="loc-input" id="newLocName" placeholder="e.g. Home, Tokyo…">
+    </div>
+    <div class="loc-field">
+      <label>Coordinates</label>
+      <div class="loc-coords-row">
+        <input type="number" class="loc-input" id="newLocLat" placeholder="Lat" step="0.01">
+        <input type="number" class="loc-input" id="newLocLon" placeholder="Lon" step="0.01">
+      </div>
+    </div>
+    <div class="loc-form-btns">
+      <button class="loc-cancel-btn" id="locCancelBtn">Cancel</button>
+      <button class="loc-save-btn"   id="locSaveBtn">Save</button>
+    </div>
+  </div>
+  <div style="padding:.75rem;border-top:1px solid var(--border);flex-shrink:0;">
+    <button class="loc-save-btn" id="locAddBtn" style="width:100%">+ Add location</button>
+  </div>
+</div>
+
+<button class="loc-tab" id="locTab">Locations</button>
+<div class="wx-toast" id="wxToast"></div>
+
+<header>
+  <div class="logo">weather<span>.</span></div>
+  <div class="header-right">
+    <div class="user-pill" id="userPill" style="display:none" title="Click to sign out">
+      <span class="user-pill-dot"></span>
+      <span class="user-pill-name" id="userPillName"></span>
+      <span class="user-pill-logout">sign out</span>
+    </div>
+    <button class="header-login-btn" id="headerLoginBtn">
+      <span class="login-dot"></span>sign in
+    </button>
+    <div class="tagline">Open-Meteo · v3</div>
+  </div>
+</header>
+
+<div class="settings-wrap" id="settingsWrap">
+  <button class="gear-btn" id="gearBtn" title="Settings" aria-label="Settings">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 15.5A3.5 3.5 0 0 1 8.5 12 3.5 3.5 0 0 1 12 8.5a3.5 3.5 0 0 1 3.5 3.5 3.5 3.5 0 0 1-3.5 3.5m7.43-2.92c.04-.34.07-.69.07-1.08s-.03-.74-.07-1.08l2.32-1.81c.21-.16.27-.45.14-.69l-2.2-3.81c-.13-.24-.42-.32-.66-.24l-2.74 1.1c-.57-.44-1.18-.81-1.86-1.09l-.42-2.9A.54.54 0 0 0 14 2h-4c-.28 0-.51.2-.54.46l-.42 2.9c-.68.28-1.29.65-1.86 1.09L4.44 5.35c-.24-.09-.53 0-.66.24L1.58 9.4c-.14.24-.08.53.14.69l2.32 1.81C4.03 12.26 4 12.61 4 13s.03.74.07 1.08L1.72 15.9c-.21.16-.27.45-.14.69l2.2 3.81c.13.24.42.32.66.24l2.74-1.1c.57.44 1.18.81 1.86 1.09l.42 2.9c.03.26.26.47.54.47h4c.28 0 .51-.2.54-.46l.42-2.9c.68-.28 1.29-.65 1.86-1.09l2.74 1.1c.24.09.53 0 .66-.24l2.2-3.81c.13-.24.07-.53-.14-.69l-2.32-1.81z"/>
+    </svg>
+  </button>
+
+  <div class="settings-panel" id="settingsPanel">
+    <div class="panel-section-label">Temperature unit</div>
+    <div class="unit-toggle">
+      <button class="unit-btn active" id="btn-f">°F — Fahrenheit</button>
+      <button class="unit-btn"        id="btn-c">°C — Celsius</button>
+    </div>
+    <hr class="panel-divider">
+    <div class="panel-section-label">Color theme</div>
+    <div class="theme-grid">
+      <button class="theme-btn active" data-t="dark"     title="Dark"></button>
+      <button class="theme-btn"        data-t="light"    title="Light"></button>
+      <button class="theme-btn"        data-t="sunset"   title="Sunset"></button>
+      <button class="theme-btn"        data-t="arctic"   title="Arctic"></button>
+      <button class="theme-btn"        data-t="storm"    title="Storm"></button>
+      <button class="theme-btn"        data-t="barbie"   title="Barbie"></button>
+      <button class="theme-btn"        data-t="midnight" title="Midnight"></button>
+      <button class="theme-btn"        data-t="neon"     title="Neon"></button>
+      <button class="theme-btn"        data-t="navy"     title="Navy"></button>
+      <button class="theme-btn"        data-t="gold"     title="Gold"></button>
+      <button class="theme-btn"        data-t="lavender" title="Lavender"></button>
+      <button class="theme-btn"        data-t="slate"    title="Slate"></button>
+      <button class="theme-btn"        data-t="terra"    title="Terracotta"></button>
+      <button class="theme-btn"        data-t="eco"      title="Eco"></button>
+      <button class="theme-btn"        data-t="coral"    title="Coral"></button>
+      <button class="theme-btn"        data-t="ember"    title="Ember"></button>
+      <button class="theme-btn"        data-t="aurora"   title="Aurora"></button>
+      <button class="theme-btn"        data-t="sakura"   title="Sakura"></button>
+      <button class="theme-btn"        data-t="galaxy"   title="Galaxy"></button>
+      <button class="theme-btn"        data-t="waves"    title="Waves"></button>
+      <button class="theme-btn"        data-t="city"     title="City"></button>
+      <button class="theme-btn"        data-t="disco"    title="Disco"></button>
+      <button class="theme-btn"        data-t="bubbles"  title="Bubbles"></button>
+      <button class="theme-btn"        data-t="crystal"  title="Crystal"></button>
+    </div>
+    <div class="theme-name" id="themeName">Dark</div>
+  </div>
+</div>
+
+<div class="search-row">
+  <input type="number" id="lat" placeholder="Latitude (e.g. 37.34)" step="0.01">
+  <input type="number" id="lon" placeholder="Longitude (e.g. -121.89)" step="0.01">
+  <button class="loc-btn"      id="locBtn"     title="Use my location">📍</button>
+  <button class="save-loc-btn" id="saveLocBtn" title="Save this location">＋ save</button>
+  <button class="fetch-btn"    id="fetchBtn">Fetch →</button>
+</div>
+<div id="status"></div>
+<div id="content">
+  <div class="placeholder"><div class="big">⛅</div>Press 📍 for your location, or enter coordinates</div>
+</div>
+
+<!-- ══════════════════════════════════════
+     AUTH MODAL — with full password reset flow
+═══════════════════════════════════════ -->
+<div class="auth-overlay" id="authOverlay">
+  <div class="auth-modal" role="dialog" aria-modal="true" aria-labelledby="authModalTitle">
+    <div class="auth-modal-stripe"></div>
+
+    <div class="auth-modal-body">
+      <div class="auth-modal-head">
+        <div>
+          <div class="auth-modal-wordmark" id="authModalTitle">weather<span>.</span></div>
+        </div>
+        <button class="auth-modal-close" id="authModalClose" aria-label="Close">✕</button>
+      </div>
+
+      <p class="auth-modal-tagline" id="authModalSub">
+        Create an account to save your locations to the cloud — access them from any device.
+      </p>
+
+      <!-- tab switcher -->
+      <div class="auth-tabs" role="tablist">
+        <button class="auth-tab active" id="authTabRegister" role="tab" aria-selected="true">Create account</button>
+        <button class="auth-tab"        id="authTabLogin"    role="tab" aria-selected="false">Sign in</button>
+      </div>
+
+      <!-- ── REGISTER / LOGIN shared: username ── -->
+      <div class="auth-field" id="authUsernameField">
+        <label for="authUsername">Username</label>
+        <input type="text" class="auth-input" id="authUsername"
+               placeholder="choose a username"
+               autocomplete="username" spellcheck="false">
+      </div>
+
+      <!-- ── REGISTER / LOGIN shared: password ── -->
+      <div class="auth-field" id="authPasswordField">
+        <label for="authPassword">Password</label>
+        <input type="password" class="auth-input" id="authPassword"
+               placeholder="••••••••"
+               autocomplete="current-password">
+        <!-- "Forgot password?" only shown on login tab -->
+        <button class="auth-forgot-link hidden" id="authForgotLink">Forgot password?</button>
+      </div>
+
+      <!-- ── REGISTER only: security question ── -->
+      <div id="authSecurityWrap">
+        <div class="auth-field">
+          <label for="authSecurityQuestion">Security question <span style="color:var(--muted);font-size:.6rem">(optional, for account recovery)</span></label>
+          <select class="auth-select" id="authSecurityQuestion">
+            <option value="">— skip for now —</option>
+            <option value="What was the name of your first pet?">What was the name of your first pet?</option>
+            <option value="What city were you born in?">What city were you born in?</option>
+            <option value="What is your mother's maiden name?">What is your mother's maiden name?</option>
+            <option value="What was the make of your first car?">What was the make of your first car?</option>
+            <option value="What was the name of your childhood best friend?">What was the name of your childhood best friend?</option>
+            <option value="What street did you grow up on?">What street did you grow up on?</option>
+            <option value="What was your childhood nickname?">What was your childhood nickname?</option>
+            <option value="What is the name of your favourite childhood teacher?">What is the name of your favourite childhood teacher?</option>
+          </select>
+        </div>
+        <div class="auth-field">
+          <label for="authSecurityAnswer">Your answer</label>
+          <input type="text" class="auth-input" id="authSecurityAnswer"
+                 placeholder="e.g. Fluffy"
+                 autocomplete="off" spellcheck="false">
+          <div class="auth-field-hint">Answers are case-insensitive and hashed — we never store them in plain text.</div>
+        </div>
+      </div>
+
+      <!-- ── RESET step 1: enter username ── -->
+      <div id="authResetAskWrap" class="hidden">
+        <div class="auth-field">
+          <label for="authResetUsername">Username</label>
+          <input type="text" class="auth-input" id="authResetUsername"
+                 placeholder="your username"
+                 autocomplete="username" spellcheck="false">
+        </div>
+      </div>
+
+      <!-- ── RESET step 2: answer security question ── -->
+      <div id="authResetVerifyWrap" class="hidden">
+        <div class="auth-field">
+          <label>Your security question</label>
+          <div class="auth-question-box" id="authResetQuestionText">—</div>
+        </div>
+        <div class="auth-field">
+          <label for="authResetVerifyAnswer">Your answer</label>
+          <input type="text" class="auth-input" id="authResetVerifyAnswer"
+                 placeholder="e.g. Fluffy"
+                 autocomplete="off" spellcheck="false">
+        </div>
+      </div>
+
+      <!-- ── RESET step 3: new password ── -->
+      <div id="authNewPassWrap" class="hidden">
+        <div class="auth-field">
+          <label for="authNewPassword">New password</label>
+          <input type="password" class="auth-input" id="authNewPassword"
+                 placeholder="at least 6 characters"
+                 autocomplete="new-password">
+        </div>
+        <div class="auth-field">
+          <label for="authNewPassword2">Confirm new password</label>
+          <input type="password" class="auth-input" id="authNewPassword2"
+                 placeholder="••••••••"
+                 autocomplete="new-password">
+        </div>
+      </div>
+
+      <!-- error + submit -->
+      <div class="auth-error" id="authError"></div>
+      <button class="auth-submit" id="authSubmit">Create account</button>
+
+      <p class="auth-footer-note">
+        Optional — locations also save locally.<br>
+        Sign in to <strong>sync across devices</strong>.
+      </p>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
